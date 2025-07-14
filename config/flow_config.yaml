@@ -1,0 +1,46 @@
+conversation_tree:
+  - id: "start"
+    question: "Hello! What can I help you with today? (e.g., find a product, check order status, or something else?)"
+    expected_responses:
+      - keywords: ["product", "item", "stock"]
+        next_node_id: "ask_product_type"
+      - keywords: ["order", "delivery", "status"]
+        next_node_id: "ask_order_number"
+      - keywords: ["weather", "temperature"]
+        next_node_id: "ask_location_weather"
+    default_next_node_id: "clarify_intent"
+
+  - id: "ask_product_type"
+    question: "What type of product are you looking for?"
+    expected_responses:
+      - keywords: ["electronics", "tech"]
+        next_node_id: "show_electronics_options"
+        action: "lookup_products" # Tool call
+        llm_prompt_modifier: "Be specific about electronics available."
+      - keywords: ["clothing", "apparel"]
+        next_node_id: "show_clothing_options"
+        action: "lookup_products"
+        llm_prompt_modifier: "Highlight clothing categories."
+    default_next_node_id: "ask_product_type_again"
+
+  - id: "ask_order_number"
+    question: "Please provide your order number."
+    expected_responses:
+      - patterns: ["^\\d{6,10}$"] # Regex for 6-10 digits
+        next_node_id: "confirm_order_number"
+        action: "get_order_status" # Tool call
+    default_next_node_id: "invalid_order_number"
+
+  - id: "ask_location_weather"
+    question: "Which city are you interested in for the weather?"
+    expected_responses:
+      - keywords: ["Melbourne", "Sydney", "Brisbane"] # Can be more dynamic with LLM
+        next_node_id: "display_weather"
+        action: "get_current_weather" # Tool call
+    default_next_node_id: "weather_location_unclear"
+
+  - id: "display_weather"
+    question: "Here's the weather for {location}: {weather_data}. Is there anything else I can help you with?"
+    end_of_path: true # Marks a terminal node, or can loop back
+
+  # ... other nodes for different paths (show_electronics_options, confirm_order_number, etc.)

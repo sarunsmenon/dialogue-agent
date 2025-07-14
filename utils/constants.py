@@ -1,4 +1,5 @@
 LLM_MODEL=''
 LLM_KEY=''
 
-CONFIG_FILE='config/logging.conf'
+LOG_CONFIG_FILE='config/logging.conf'
+FLOW_CONFIG='config/flow_config.yaml'

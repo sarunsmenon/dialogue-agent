@@ -1,13 +1,13 @@
 import logging
 import logging.config
 
-from utils.constants import CONFIG_FILE
+from utils.constants import LOG_CONFIG_FILE
 
 def setup_logging():
     """
     set up logging func
     """
-    logging.config.fileConfig(CONFIG_FILE)
+    logging.config.fileConfig(LOG_CONFIG_FILE)
 
 def setup_defaults():
     "setup default functions"
